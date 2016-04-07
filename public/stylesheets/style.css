@@ -1,0 +1,241 @@
+/*
+Color Palette
+
+Primary #c28f5e
+Secondary #800000
+Primary Accent #965e26
+Neutral #ffead6
+*/
+html {
+    /*have HTML match the view port*/
+
+	height: 100vh;
+	overflow-x: hidden;
+
+	background-color: #800000;
+}
+
+body {
+    background-color: #ffead6;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+
+	-webkit-box-shadow: 0px 0px 100px 15px rgba(0,0,0,0.9);
+	-moz-box-shadow: 0px 0px 100px 15px rgba(0,0,0,0.9);
+	box-shadow: 0px 0px 100px 15px rgba(0,0,0,0.9);
+}
+
+html, button, input {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #965e26;
+}
+
+/*App title*/
+h1 {
+    font-family: 'Alex Brush', cursive;
+    text-align: center;
+    font-size: 3rem;
+    letter-spacing: 0.05rem;
+    margin-top: .9rem;
+    margin-bottom: .9rem;
+    color: #ffead6;
+
+    text-shadow: 3px 1px 5px #000000;
+}
+
+h2 {
+    text-align: center;
+    font-size: 3rem;
+    color: #800000;
+}
+
+input {
+    display: inline-block;
+
+    width: 150px;
+    background: #ffead6;
+    border-style: none;
+    border-bottom: 2px solid #c28f5e;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    font-size: 30px;
+}
+
+p {
+    color: #965e26;
+    font-size: 20px;
+}
+
+button {
+    font-size: 22px;
+
+    border: 2px solid #800000;
+    color: #800000;
+    background: none;
+    width: 10rem;
+    margin: 1rem;
+    cursor: pointer;
+    box-shadow: inset 0px 0px 0px 0px #800000;
+
+    transition: color .3s, box-shadow .3s;
+}
+
+button:hover {
+    color: #800000;
+}
+
+button:active {
+	color: #ffead6;
+    box-shadow: inset 0px 0px 0px 50px #800000;
+}
+
+/* Element Specific Styles */
+
+/*Move to two lines if nessary*/
+.flex-container {
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.peanut-gallery-icon img {
+    position: absolute;
+
+    width: 10rem;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.peanut-gallery-icon {
+    display: inline-block;
+    position: relative;
+
+    background-color: #ffead6;
+    border-radius: 10rem;
+    border: .35rem solid #965e26;
+    width: 12rem;
+    height: 12rem;
+    margin: .8rem;
+    box-shadow: inset 0px 0px 17px 4px rgba(150,94,38,0.9);
+}
+
+.title {
+    position: absolute;
+
+    text-align: center;
+    background-color: #800000;
+    left: 0;
+    right: 0;
+    top: 0;
+
+    min-height: 100%;
+
+    transition: height .5s;
+
+    /*Show over content better*/
+	-webkit-box-shadow: 0px 0px 40px 3px rgba(0,0,0,0.9);
+	-moz-box-shadow: 0px 0px 40px 3px rgba(0,0,0,0.9);
+	box-shadow: 0px 0px 40px 3px rgba(0,0,0,0.9);
+}
+
+.title input {
+	background: #800000;
+    border-bottom: 2px solid #c28f5e;
+    color: #ffead6;
+	width: 90%;
+    max-width: 22rem;
+    margin: 1rem;
+	text-shadow: 3px 1px 5px #000000;
+}
+
+.title button {
+    border: 2px solid #c28f5e;
+    color: #ffead6;
+    background: none;
+    width: 10rem;
+    margin: 1rem;
+    cursor: pointer;
+	text-shadow: 3px 1px 5px #000000;
+	box-shadow: inset 0px 0px 0px 0px #c28f5e;
+
+    transition: color .3s, box-shadow .3s;
+}
+
+.title button:hover {
+    color: #c28f5e;
+}
+
+.title button:active {
+	color: #ffead6;
+    box-shadow: inset 0px 0px 0px 50px #c28f5e;
+}
+
+
+/* Small transition logic */
+.title.small {
+    /* height: 7rem; */
+    min-height: 0;
+}
+
+.title.small h1 {
+    /* display: none; */
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #800000;
+    text-shadow: 3px 1px 5px #800000;
+}
+
+.title.small peanut-gallery-icon {
+    width: 4rem;
+}
+
+.small .peanut-gallery-icon {
+    width: 4rem;
+    height: 4rem;
+}
+
+.small .peanut-gallery-icon img {
+    width: 3rem;
+    height: 3rem;
+}
+
+h1 {
+    transition: max-height .5s, margin .5s, color .5s, text-shadow .5s;
+    overflow-y: hidden;
+    max-height: 1000px;
+}
+
+.peanut-gallery-icon {
+    transition: width .4s, height .4s;
+}
+
+.peanut-gallery-icon img {
+    transition: width .4s, height .4s;
+}
+
+/* Conent styling */
+
+.content {
+    margin-top: 15rem;
+}
+
+/*Media query to adjust if buttons are on two lines*/
+@media screen and (max-width: 400px) {
+	.content {
+	    margin-top: 18rem;
+	}
+}
+
+.content p {
+	display: inline-block;
+    margin-left: 1rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+}
+

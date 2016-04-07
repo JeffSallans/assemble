@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>Peanut Gallery</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href='https://fonts.googleapis.com/css?family=Alex+Brush|Source+Sans+Pro:400,700,300italic' rel='stylesheet' type='text/css'>
+		<link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/ >
+		<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+		<script src="/scripts/angular.min.js"></script>
+		<script src="/scripts/pgapp.js"></script>
+	</head>
+	<body ng-app="peanutGallery" ng-controller="mainController">
+		<div class="title" ng-class="{'small': showGallery }">
+			<h1>The</h1>
+			<h1>Peanut Gallery</h1>
+			<div class="peanut-gallery-icon">
+				<img src="images/peanut-gallery-icon.png">
+			</div>
+			<div>
+				<input placeholder="say something" ng-model="newPost" />
+			</div>
+			<div class="flex-container">
+				<button ng-click="createNewPost()">Go Nuts</button>
+				<button ng-show="!showGallery" ng-click="toggleGalleryView()">Visit Gallery</button>
+				<button ng-show="showGallery" ng-click="getAll()">Refill</button>
+			</div>
+		</div>
+		<div class="content">
+			<div ng-if="showGallery" ng-repeat="post in posts">
+				<div>
+					<i>{{ $parent.formatPrettyDate(post.timestamp) }}</i>
+					<p>{{ post.body }}</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
