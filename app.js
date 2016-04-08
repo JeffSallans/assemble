@@ -6,15 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 //___ Database Setup ___
-// <mongodb>
-var mongoose = require("mongoose");
 
-require("./models/Posts");
-mongoose.connect("mongodb://localhost/peanutgallery");
-// </mongodb>
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var poll = require('./routes/poll');
 
 var app = express();
 
@@ -34,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //___ Setup Routes ___
 app.use('/', routes);
-app.use('/users', users);
+app.use('/poll', poll);
 
 //___ 404 ___
 // catch 404 and forward to error handler

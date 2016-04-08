@@ -34,8 +34,8 @@ View application at [localhost:3000](http://localhost:3000)
 
 ## To Do
 
-- [ ] POST /Poll (Starts the process to poll the users)
-- [ ] Push Bullet API send texts (https://docs.pushbullet.com/#send-sms)
+- [x] POST /Poll (Starts the process to poll the users)
+- [x] Push Bullet API send texts (https://docs.pushbullet.com/#send-sms)
 - [ ] GET /User/{id}/Rsvp (Returns data about the user's reponse)
 - [ ] POST /User/{id}/Rsvp (Updates data about the user's reponse)
 - [ ] GET /User (Returns a list of registered users)

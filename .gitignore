@@ -2,10 +2,11 @@
 .svn
 log/*.log
 tmp/**
-node_modules/
+node_modules/*
 
 # Ignore all modules EXCEPT the manually added pushbullet API
-!node_modules/pushbullet
+!node_modules/pushbullet/
+!node_modules/pushbullet/*
 
 .sass-cache
 css/reveal.min.css
