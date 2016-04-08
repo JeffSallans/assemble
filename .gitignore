@@ -3,6 +3,13 @@
 log/*.log
 tmp/**
 node_modules/
+
+# Ignore all modules EXCEPT the manually added pushbullet API
+!node_modules/pushbullet
+
 .sass-cache
 css/reveal.min.css
 js/reveal.min.js
+
+# Ignore directory that holds API keys
+secret/
