@@ -9,9 +9,9 @@ Full stack web application (Angular, Web Sockets, Sockets.io, Express.js, Node.j
 * Angular (using ES6)
 * Node.js (using ES6)
 * NPM modules
-** Express
-** Rethinkdb
-** Sockets.io
+  * Express
+  * Rethinkdb
+  * Sockets.io
 * Push Bullet API
 
 ## Deployment
