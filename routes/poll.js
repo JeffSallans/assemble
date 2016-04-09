@@ -54,28 +54,4 @@ function sendText(number, message) {
 	pusher.sendSMS(data, (d) => {
 		console.log('Finished: ', d)
 	});
-
-/*
-	var responseBody = [];
-
-	var pushBulletRequest = https.request(pushBulletRequestOptions, data, (pushBulletResponse) => {
-		console.log('statusCode: ', pushBulletResponse.statusCode);
-		console.log('headers: ', pushBulletResponse.headers);
-
-		pushBulletResponse.on('data', (d) => {
-			responseBody.push(d);
-		});
-		pushBulletResponse.on('end', () => {
-			var fullResponseBody = Buffer.concat(responseBody).toString();
-			console.log('body: ', fullResponseBody);
-		});
-	});
-	//Completes the call
-	pushBulletRequest.end();
-
-	//Records any errors
-	pushBulletRequest.on('error', (e) => {
-		console.error(e);
-	});
-*/
 }
