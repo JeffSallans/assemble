@@ -14,3 +14,9 @@ js/reveal.min.js
 
 # Ignore directory that holds API keys
 secret/
+
+# ignore generated logs
+*.log
+
+# ignore sublime workspace
+*.sublime-workspace

@@ -24,9 +24,12 @@ const pushBulletRequestOptions = {
 router.get('/', function(req, res, next) {
 
 	sendText(8105238169, "Does this work Jeff");
-	
+
 	//Return success
 	res.sendStatus(OKAY_STATUS);
+
+	//Close db connection
+	next()
 });
 
 //Reset all rsvp data
@@ -34,6 +37,9 @@ router.delete('/', function(req, res, next) {
 
 	//Return success
 	res.sendStatus(NOT_IMPLEMENTED_STATUS);
+
+	//Close db connection
+	next()
 });
 
 module.exports = router;
