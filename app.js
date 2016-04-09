@@ -49,10 +49,27 @@ app.use(createConnection);
 var poll = require('./routes/poll');
 app.use('/poll', poll);
 
+var rsvp = require('./routes/rsvp');
+app.use('/rsvp', rsvp);
+
 // Middleware to close a connection to the database
 app.use(closeConnection);
 
+//___ 404 ___
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
+});
 
+//___ Error Handlers ___
+
+//If there is an error during the request res function would
+// be skipped and the logic falls to this function
+app.use((err, req, res, next) => {
+	handleError(res, err);
+});
 
 //___ Database Setup ___
 
@@ -80,22 +97,6 @@ rethinkdb.connect(config.rethinkdb)
 				return Promise.all(promises)
 					.then(() => conn.close());
 			});
-});
-
-//___ 404 ___
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
-});
-
-//___ Error Handlers ___
-
-//If there is an error during the request res function would
-// be skipped and the logic falls to this function
-app.use((err, req, res, next) => {
-	handleError(err, res);
 });
 
 module.exports = app;

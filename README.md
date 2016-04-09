@@ -38,14 +38,14 @@ View application at [localhost:3000](http://localhost:3000)
 - [x] Push Bullet API send texts (https://docs.pushbullet.com/#send-sms)
 - [ ] GET /User/{id}/Rsvp (Returns data about the user's reponse)
 - [ ] POST /User/{id}/Rsvp (Updates data about the user's reponse)
-- [ ] GET /User (Returns a list of registered users)
+- [x] GET /User (Returns a list of registered users)
 - [ ] Frontend - Display user list
 - [ ] Frontend - Poll action
 - [ ] Frontend - Display rsvp details on load
 - [ ] Web Sockets emit messages when Rsvp is updated on the backend
 - [ ] Frontend - Web socket rsvp details
-- [ ] POST /User (Adds a new user/Updates existing user)
-- [ ] DELETE /User/{id} (Removes a user)
+- [x] POST /User (Adds a new user/Updates existing user)
+- [x] DELETE /User/{id} (Removes a user)
 - [ ] Frontend - Manage user list
 - [ ] Frontend Polish - CSS, Animations
 - [ ] Frontend - mobile friendly
