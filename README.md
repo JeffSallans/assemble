@@ -4,7 +4,7 @@ Full stack web application (Angular, Web Sockets, Sockets.io, Express.js, Node.j
 
 ## [Demo](http://assemble.jeffsallans.com)
 
-## Install Process
+## Technology
 
 * Angular (using ES6)
 * Node.js (using ES6)
@@ -14,18 +14,34 @@ Full stack web application (Angular, Web Sockets, Sockets.io, Express.js, Node.j
   * Sockets.io
 * Push Bullet API (https://docs.pushbullet.com/#send-sms)
 
+## Install
+
+1) Pull this repository
+
+2) Download and setup rethinkdb (https://www.rethinkdb.com/)
+
+3) Install all npm modules
+```
+$ npm install
+```
+4) Manually install pushbullet dependent modules
+```
+$ npm install pushbullet
+```
+
 ## Deployment
 
-Run rethinkdb.exe
+1) Run rethinkdb.exe
 
-Navigate to project directory
+2) Navigate to project directory
 ```
-//Actual command is node ./bin/www
 //npm start defined in package.json
+//Actual command is node --harmony ./bin/www
+//Harmony flag enables staged ES6 features
 $ npm start
 ```
 
-View application at [localhost:3000](http://localhost:3000)
+3) View application at [localhost:3000](http://localhost:3000)
 
 ## Conventions
 
