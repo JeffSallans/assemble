@@ -12,6 +12,7 @@
     "debug": "~2.2.0",
     "ejs": "~2.3.3",
     "express": "~4.13.1",
+    "lodash": "^4.9.0",
     "morgan": "~1.6.1",
     "rethinkdb": "^2.3.0",
     "serve-favicon": "~2.3.0"
