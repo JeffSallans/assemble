@@ -36,6 +36,9 @@ app.use(cookieParser());
 // expose everything in directory public
 app.use(express.static(path.join(__dirname, 'public')));
 
+//___ View Engine Setup ___
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 //___ API Call ___
 
@@ -46,11 +49,17 @@ app.use(createConnection);
 // Define main routes
 // Assumes all of these requests call next to close connection
 
-var poll = require('./routes/poll');
+var initSinglePageApp = require(path.join(__dirname, 'routes', 'initSinglePageApp'));
+app.use('/', initSinglePageApp);
+
+var poll = require(path.join(__dirname, 'routes', 'poll'));
 app.use('/poll', poll);
 
-var rsvp = require('./routes/rsvp');
+var rsvp = require(path.join(__dirname, 'routes', 'rsvp'));
 app.use('/rsvp', rsvp);
+
+var user = require(path.join(__dirname, 'routes', 'user'));
+app.use('/user', user);
 
 // Middleware to close a connection to the database
 app.use(closeConnection);
@@ -74,8 +83,8 @@ app.use((err, req, res, next) => {
 //___ Database Setup ___
 
 var databaseTables = [
-	'Rsvp',
-	'User'
+	'Rsvps',
+	'Users'
 ];
 
 /*
@@ -157,7 +166,7 @@ function checkTableExists(tableName, conn) {
 			console.log(`${tableName} table initialize`);
 		}).error((err) => {
 			if (err) {
-				console.log("Could not wait for the completion of the index ${tableName}");
+				console.log(`Could not wait for the completion of the index ${tableName}`);
 				console.log(err);
 				process.exit(1);
 			}
@@ -171,12 +180,12 @@ function checkTableExists(tableName, conn) {
 //@param conn {object} - rethinkdb connection
 //@returns {Promise}
 function checkDatabaseExists(databaseName, conn) {
-	return rethinkdb.dbList().contains('example_database')
+	return rethinkdb.dbList().contains(databaseName)
 		.do(function(databaseExists) {
 			return rethinkdb.branch(
 				databaseExists,
 				{ created: 0 },
-				rethinkdb.dbCreate('example_database')
+				rethinkdb.dbCreate(databaseName)
 			);
 		}).run(conn);
 }

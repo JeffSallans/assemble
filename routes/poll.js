@@ -21,7 +21,7 @@ const pushBulletRequestOptions = {
 };
 
 //Triggers a text message to be sent to all users
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
 
 	sendText(8105238169, "Does this work Jeff");
 

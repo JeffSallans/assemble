@@ -2,26 +2,25 @@
 
 const rethinkdb = require('rethinkdb');
 
-//Provides basic CRUD functions for a rethink table
+//Provides basic CRUD API functions for a rethink table
 class RethinkdbTable {
 
 	//@param tableName {string} - Name of the table
 	constructor(tableName) {
-		debugger;
 		this.tableName = tableName;
 	}
 
 	//@param req
 	//	@prop _rdbConn - which is the rethinkdb connection varaible
 	getAll(req, res, next) {
-		debugger;
 	    rethinkdb.table(this.tableName)
 	    .orderBy({index: "createdAt"})
 	    .run(req._rdbConn)
-	    .then(function(cursor) {
+	    .then((cursor) => {
 	        return cursor.toArray();
 	    })
-	    .then(function(result) {
+	    .then((result) => {
+	    	res.type('application/json');
 	        res.send(JSON.stringify(result));
 	    })
 	    .error(error => { throw error })
@@ -35,15 +34,22 @@ class RethinkdbTable {
 	//@returns the inserted entry (now with id)
 	create(req, res, next) {
 	    var record = req.body;
+	    
+	    //If id is set to null remove it, to prevent db issues
+	    if (record.id === null) {
+	    	delete record.id;
+	    }
+
 	    record.createdAt = rethinkdb.now(); // Set the field `createdAt` to the current time
 	    rethinkdb.table(this.tableName)
 	    .insert(record, {returnChanges: true})
     	.run(req._rdbConn)
-    	.then(function(result) {
+    	.then((result) => {
 	        if (result.inserted !== 1) {
-	            handleError(res, next)(new Error(`Document was not inserted into ${this.tableName}.`));
+	            throw new Error(`Document was not inserted into ${this.tableName}.`);
 	        }
 	        else {
+		    	res.type('application/json');
 	            res.send(JSON.stringify(result.changes[0].new_val));
 	        }
 	    })
@@ -65,14 +71,15 @@ class RethinkdbTable {
 	        .get(record.id)
 	        .update(record, {returnChanges: true})
 	        .run(req._rdbConn)
-	        .then(function(result) {
+	        .then((result) => {
+    	    	res.type('application/json');
 	            res.send(JSON.stringify(result.changes[0].new_val));
 	        })
 	        .error(error => { throw error })
 	        .finally(next);
 	    }
 	    else {
-	        create(req, res, next);
+	        this.create(req, res, next);
 	    }
 	}
 
@@ -91,7 +98,8 @@ class RethinkdbTable {
 	        .get(record.id)
 	        .delete()
 	        .run(req._rdbConn)
-	        .then(function(result) {
+	        .then((result) => {
+    	    	res.type('application/json');
 	            res.send(JSON.stringify(result));
 	        })
 	        .error(error => { throw error })

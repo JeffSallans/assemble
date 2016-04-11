@@ -29,6 +29,8 @@ $ npm install
 $ npm install pushbullet
 ```
 
+5) Create secret/pushBulletApiToken.js that returns the API key
+
 ## Deployment
 
 1) Run rethinkdb.exe
@@ -48,21 +50,31 @@ $ npm start
 * CSS - BEM (https://css-tricks.com/bem-101/)
 * Angular - John Papa's Guide (https://github.com/johnpapa/angular-styleguide)
 
+## Take Aways
+
+* Rethink node module library requires more work than mongodb
+  * Creating tables and db if they don't exists is a pain
+* [Postman](https://www.getpostman.com/) is easy for development testing and you can save your tests in a suite
+* [Iron Node](http://s-a.github.io/iron-node/) is great for debugging node applications
+  * Easy to setup and learn
+  * Uses chrome debugger
+* Frontend and backend model sharing is not easy.  One uses require and the other use html to include files
+
 ## To Do
 
 - [x] POST /Poll (Starts the process to poll the users)
 - [x] Push Bullet API send texts (https://docs.pushbullet.com/#send-sms)
-- [ ] GET /User/{id}/Rsvp (Returns data about the user's reponse)
-- [ ] POST /User/{id}/Rsvp (Updates data about the user's reponse)
+- [x] GET /Rsvp (Returns data about the user's reponse)
+- [x] POST /Rsvp (Updates data about the user's reponse)
 - [x] GET /User (Returns a list of registered users)
-- [ ] Frontend - Display user list
+- [x] Frontend - Display user list
 - [ ] Frontend - Poll action
-- [ ] Frontend - Display rsvp details on load
+- [x] Frontend - Display rsvp details on load
 - [ ] Web Sockets emit messages when Rsvp is updated on the backend
 - [ ] Frontend - Web socket rsvp details
 - [x] POST /User (Adds a new user/Updates existing user)
 - [x] DELETE /User/{id} (Removes a user)
-- [ ] Frontend - Manage user list
+- [x] Frontend - Manage user list
 - [ ] Frontend Polish - CSS, Animations
 - [ ] Frontend - mobile friendly
 - [ ] DELETE /Poll (Resets the polling process)

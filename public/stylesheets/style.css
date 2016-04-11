@@ -177,12 +177,12 @@ button:active {
 
 
 /* Small transition logic */
-.title.small {
+.title.title--small {
     /* height: 7rem; */
     min-height: 0;
 }
 
-.title.small h1 {
+.title.title--small h1 {
     /* display: none; */
     max-height: 0;
     margin-top: 0;
@@ -191,16 +191,12 @@ button:active {
     text-shadow: 3px 1px 5px #800000;
 }
 
-.title.small peanut-gallery-icon {
-    width: 4rem;
-}
-
-.small .peanut-gallery-icon {
+.title.title--small .peanut-gallery-icon {
     width: 4rem;
     height: 4rem;
 }
 
-.small .peanut-gallery-icon img {
+.title.title--small .peanut-gallery-icon img {
     width: 3rem;
     height: 3rem;
 }

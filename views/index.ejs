@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>Rocket League, Assemble!</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/ >
+		<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+		<script src="/scripts/lodash.core.js"></script>
+		<script src="/scripts/angular.min.js"></script>
+		<script src="/scripts/angular-route.min.js"></script>
+		<script src="/models/Rsvp.js"></script>
+		<script src="/models/User.js"></script>
+		<script src="/scripts/assembleApp.js"></script>
+	</head>
+	<body ng-app="assemble" ng-controller="mainController">
+		<div class="title" ng-class="{'title--small': showPoll }">
+			<h1>Assemble!</h1>
+			<div class="peanut-gallery-icon">
+				<img src="images/peanut-gallery-icon.png">
+			</div>
+			<div ng-show="!showPoll">
+				<input type="text" placeholder="name" ng-model="name" />
+				<input type="tel" placeholder="phone" ng-model="phoneNumber" />
+			</div>
+			<div ng-show="showPoll">
+				<input type="text" placeholder="name" ng-model="currentUser.name" disabled/>
+				<input type="tel" placeholder="phone" ng-model="currentUser.phoneNumber" disabled/>
+			</div>
+			<div class="flex-container">
+				<button ng-show="!showPoll" ng-click="methods.enterSite()">Enter</button>
+				<button ng-show="!currentUser.isSubscribed" ng-click="methods.subscribeUser()">Add Me</button>
+				<button ng-show="currentUser.isSubscribed" ng-show="showPoll" ng-click="methods.unsubscribeUser()">Remove Me</button>
+				<button ng-show="showPoll" ng-click="methods.startPoll()">Text Everyone</button>
+				<button ng-show="showPoll" ng-click="methods.logout()">Logout</button>
+			</div>
+		</div>
+		<div class="content" ng-if="showPoll">
+			<div class="poll">
+				<div class="poll__summary-bar">
+					<span>
+						{{rsvps.length}} / {{users.length}} Response
+					</span>
+					 | 
+					<span>
+						{{yesRsvps.length}} Yes Responses
+					</span>
+				</div>
+				<ul class="poll__data">
+					<li ng-repeat="user in users track by user.name">
+						{{user.name}} responds: {{ methods.getPrettyRsvpResponseForUser(user)}}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
