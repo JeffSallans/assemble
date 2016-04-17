@@ -25,7 +25,7 @@ Full stack web application (Angular, Web Sockets, Sockets.io, Express.js, Node.j
 ```
 $ npm install
 ```
-4) Manually install pushbullet dependent modules
+4) Manually install pushbullet dependent modules (Because the push bullet api on GitHub is more up-to-date than npm; npm doesn't have Ephemerals)
 ```
 $ npm install pushbullet
 ```
