@@ -9,6 +9,7 @@ const rethinkdb = require('rethinkdb');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const _ = require('lodash');
+const socketSingleton = require('./socketSingleton');
 
 // Load config for RethinkDB and express
 const config = require(path.join(__dirname, 'config'));
@@ -17,7 +18,6 @@ const config = require(path.join(__dirname, 'config'));
 //app.use work like a waterfall, for each request each .use is called in order
 // until res.send() is called
 var app = express();
-
 
 //Expose the public directory to the frontend
 app.use(express.static(path.join(__dirname, 'public')));
@@ -101,10 +101,15 @@ rethinkdb.connect(config.rethinkdb)
 		return checkDatabaseExists(config.rethinkdb.db, conn)
 			.then(() => {
 
-				var promises = _.map(databaseTables, (tableName) => checkTableExists(tableName, conn));
+				var promises = _.map(databaseTables, (tableName) => {
+						return checkTableExists(tableName, conn)
+							.then(() => {
+								setupChangeFeedForTable(tableName, conn);
+							});
+					});
 
 				return Promise.all(promises)
-					.then(() => conn.close());
+					//.then(() => conn.close());
 			});
 });
 
@@ -147,6 +152,11 @@ function closeConnection(req, res, next) {
 	req._rdbConn.close();
 }
 
+//Set the socket io reference to be used in the request
+function setSocketConnection(req, res, next) {
+	req._io = socketSingleton.getSocket();
+}
+
 //Checks if the table exists and creates a table if it doesn't
 //@param tableName {string} - Name of the table in rethinkdb
 //@param conn {object} - rethinkdb connection
@@ -158,19 +168,46 @@ function checkTableExists(tableName, conn) {
 	})
 	.error((err) => {
 		// The database/table/index was not available, create them
-		rethinkdb.tableCreate(tableName).run(conn).finally(() => {
+		rethinkdb.tableCreate(tableName).run(conn)
+		.finally(() => {
 			return rethinkdb.table(tableName).indexCreate('createdAt').run(conn);
-		}).finally(() => {
+		})
+		.finally(() => {
 			return rethinkdb.table(tableName).indexWait('createdAt').run(conn)
-		}).then((result) => {
+		})
+		.then((result) => {
 			console.log(`${tableName} table initialize`);
-		}).error((err) => {
+		})
+		.error((err) => {
 			if (err) {
 				console.log(`Could not wait for the completion of the index ${tableName}`);
 				console.log(err);
 				process.exit(1);
 			}
 			console.log(`${tableName} table initialize`);
+		});
+	});
+}
+
+//Sets up the socket.io emitter when the rethinkdb table changes
+//@param tableName {string} - Name of the table in rethinkdb
+//@param conn {object} - rethinkdb connection
+//@return {Promise} - Resolves when change feed is setup
+function setupChangeFeedForTable(tableName, conn) {
+
+	//Setup watcher to notify the users of other changes
+	rethinkdb.table(tableName)
+	.changes()
+	.run(conn)
+	.then(cursor => {
+		
+		console.log(`change feed triggered for ${tableName}`);
+
+		var io = socketSingleton.getSocket();
+
+		//Send an emit for each item
+		cursor.each((err, item) => {
+			if (item) io.emit(tableName, item);
 		});
 	});
 }

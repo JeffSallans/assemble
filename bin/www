@@ -5,6 +5,7 @@
  */
 
 var app = require('../app');
+var socketSingleton = require('../socketSingleton');
 var debug = require('debug')('peanut-gallery:server');
 var http = require('http');
 
@@ -20,6 +21,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+socketSingleton.createSocket(server);
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -12,11 +12,13 @@ class RethinkdbTable {
 
 	//@param req
 	//	@prop _rdbConn - which is the rethinkdb connection varaible
+	//	@prop _io - the socket.io socket variable
 	getAll(req, res, next) {
 	    rethinkdb.table(this.tableName)
 	    .orderBy({index: "createdAt"})
 	    .run(req._rdbConn)
 	    .then((cursor) => {
+
 	        return cursor.toArray();
 	    })
 	    .then((result) => {
@@ -86,16 +88,16 @@ class RethinkdbTable {
 	//Inserts the body of the request
 	//@param req
 	//	@prop _rdbConn - which is the rethinkdb connection varaible
-	//	@prop body - record data to delete
+	//	@prop query - parameters provided in the query string
 	//		@prop id - record id
 	//@returns the updated entry (with id)
 	delete(req, res, next) {
-	    var record = req.body;
-	    if ((record != null) && (record.id != null)) {
+	    var queryParam = req.query;
+	    if ((queryParam != null) && (queryParam.id != null)) {
 
-	    	//Delete record at record.id
+	    	//Delete record at queryParam.id
 	        rethinkdb.table(this.tableName)
-	        .get(record.id)
+	        .get(queryParam.id)
 	        .delete()
 	        .run(req._rdbConn)
 	        .then((result) => {

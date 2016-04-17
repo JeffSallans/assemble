@@ -1,17 +1,26 @@
 (function () {
 	"use strict";
 
-	var app = angular.module("assemble", ["ngRoute"]);
+	var app = angular.module("assemble", ["ngRoute", "btford.socket-io"]);
 
 	var COOKIE_NAME_USERNAME = "name";
 	var COOKIE_NAME_PHONENUMBER = "phonenumber";
+
+	app.factory("mySocket", function(socketFactory) {
+		return socketFactory();
+	});
 
 	app.controller("mainController", [
 		"$scope",
 		"$http",
 		"$location",
 		"$q",
-		function($scope, $http, $location, $q) {
+		"mySocket",
+		function($scope, 
+			$http, 
+			$location, 
+			$q, 
+			mySocket) {
 
 			//{Array of User}
 			$scope.users = [];
@@ -57,19 +66,126 @@
 				getPrettyRsvpResponseForUser: getPrettyRsvpResponseForUser,
 			};
 
+			//___ Socket Functionality ___
+			mySocket.on('Users', function(changedUser) {
+
+				var oldRecord = null;
+				var newRecord = null;
+
+				if (changedUser.old_val) {
+					oldRecord = new User(changedUser.old_val.name,
+						changedUser.old_val.id,
+						changedUser.old_val.phoneNumber);
+				}
+
+				if (changedUser.new_val) {
+					newRecord = new User(changedUser.new_val.name,
+						changedUser.new_val.id,
+						changedUser.new_val.phoneNumber);
+				}
+
+				handleChange($scope.users, {
+					oldRecord: oldRecord,
+					newRecord: newRecord
+				});
+
+				//Update current user if that is the one that is deleted
+				if (oldRecord && !newRecord && 
+					oldRecord.id === $scope.currentUser.id) {
+				
+					$scope.currentUser.id = null;
+				}
+
+				//Update current user if that is the one that is added or modified
+				if (newRecord && newRecord.phoneNumber === $scope.currentUser.phoneNumber) {
+					
+					_.assignIn($scope.currentUser, newRecord);
+				}
+			});
+
+			mySocket.on('Rsvps', function(changedRsvp) {
+				
+				var oldRecord = null;
+				var newRecord = null;
+
+				if (changedRsvp.old_val) {
+					oldRecord = new Rsvp(changedRsvp.old_val.id,
+						changedRsvp.old_val.userId,
+						changedRsvp.old_val.respondsYes);
+				}
+
+				if (changedRsvp.new_val) {
+					newRecord = new Rsvp(changedRsvp.new_val.id,
+						changedRsvp.new_val.userId,
+						changedRsvp.new_val.respondsYes);
+				}
+
+				handleChange($scope.rsvps, {
+					oldRecord: oldRecord,
+					newRecord: newRecord
+				});
+			});
+
 			//Function call on page load
 			init();
 
 			//___ Functions ___
 
+			//@param dataSet {Array of Users|Rsvps}
+			//@param changedRecord
+			//	@prop oldRecord {Users|Rsvps} - value in the dataSet before the operation
+			//	@prop newRecord {Users|Rsvps} - value in the dataSet after the operation
+			//@modifies dataSet to represent the change
+			function handleChange(dataSet, changedRecord) {
+				//Inserted record
+				if (changedRecord.oldRecord == null) {
+
+					dataSet.push(changedRecord.newRecord); 
+				}
+				//Deleted record
+				else if (changedRecord.newRecord == null) {
+					
+					var victimResults = _.filter(dataSet, function(record) {
+						return record.id === changedRecord.oldRecord.id;
+					}) || [];
+
+					//Check if victim exists
+					if (victimResults.length > 0) {
+						//Get the index of the current value so we can swap old and new data by reference
+						var victimIndex = dataSet.indexOf(victimResults[0]);
+						dataSet.splice(victimIndex, 1);
+					}
+				}
+				//Updated data
+				else {
+					var targetResults = _.filter(dataSet, function(record) {
+						return record.id === changedRecord.oldRecord.id;
+					}) || [];
+
+					//Check if target exists
+					if (targetResults.length > 0) {
+
+						//Get the index of the current value so we can swap old and new data by reference
+						var targetIndex = dataSet.indexOf(targetResults[0]);
+						_.assignIn(dataSet[targetIndex], changedRecord.newRecord);
+					}
+					else {
+						dataSet.push(changedRecord.newRecord);
+					}
+				}
+			}
+
 			//Logic to run on page load
+			//RSVP URL OPTIONS
+			//	YES - /#?pN=5555555&rY=true
+			//	NO - /#?pN=5555555&rY=false
 			function init() {
 
 				//{string}
-				var phoneNumber = $location.search().phoneNumber;
+				var phoneNumber = $location.search().pN;
 
 				//{bool}
-				var respondsYes = $location.search().respondsYes;
+				var respondsYes = $location.search().rY;
 
 				//Only check cookie if userId doesn't exist
 				if (!phoneNumber) {
@@ -149,7 +265,7 @@
 
 			//@returns {Promise resolves Object} - Promise resolves when DELETE /user returns
 			function unsubscribeUser() {
-				return $http.delete("/user", $scope.currentUser);
+				return $http.delete("/user" + "?id=" + $scope.currentUser.id);
 			}
 
 			//If valid sets form data to current user and stores data in cookie

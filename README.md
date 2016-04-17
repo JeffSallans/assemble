@@ -7,12 +7,13 @@ Full stack web application (Angular, Web Sockets, Sockets.io, Express.js, Node.j
 ## Technology
 
 * Angular (using ES6)
+  * [angular-socket-io](https://github.com/btford/angular-socket-io)
 * Node.js (using ES6)
 * NPM modules
   * Express
-  * Rethinkdb
-  * Sockets.io
-* Push Bullet API (https://docs.pushbullet.com/#send-sms)
+  * [Rethinkdb](https://rethinkdb.com)
+  * [Sockets.io](http://socket.io/download/)
+* [Push Bullet API](https://docs.pushbullet.com/#send-sms)
 
 ## Install
 
@@ -68,16 +69,16 @@ $ npm start
 - [x] POST /Rsvp (Updates data about the user's reponse)
 - [x] GET /User (Returns a list of registered users)
 - [x] Frontend - Display user list
-- [ ] Frontend - Poll action
+- [x] Frontend - Poll action
 - [x] Frontend - Display rsvp details on load
-- [ ] Web Sockets emit messages when Rsvp is updated on the backend
-- [ ] Frontend - Web socket rsvp details
+- [x] Web Sockets emit messages when Rsvp is updated on the backend
+- [x] Frontend - Web socket rsvp details
 - [x] POST /User (Adds a new user/Updates existing user)
 - [x] DELETE /User/{id} (Removes a user)
 - [x] Frontend - Manage user list
 - [ ] Frontend Polish - CSS, Animations
 - [ ] Frontend - mobile friendly
-- [ ] DELETE /Poll (Resets the polling process)
+- [x] DELETE /Poll (Resets the polling process)
 
 ## Contributors
 

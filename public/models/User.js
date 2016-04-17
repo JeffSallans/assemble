@@ -1,24 +1,21 @@
 "use strict";
 
 //Holds data about the user
-class User {
+var User = function  User(name, id, phoneNumber) {
 	
-	constructor(name = "", id = null, phoneNumber = "") {
+	//{UUID} - Database identifier, if not in the db leave null
+	this.id = id !== undefined ? id : null;
 
-		//{UUID} - Database identifier, if not in the db leave null
-		this.id = id;
+	//{string} - Number can text
+	this.phoneNumber = phoneNumber !== undefined ? phoneNumber : "";
 
-		//{string} - Number can text
-		this.phoneNumber = phoneNumber;
+	//{string} - User display name
+	this.name = name !== undefined ? name : "";
 
-		//{string} - User display name
-		this.name = name;
-
-		//{bool} - True if the user wants to receive text messages
-		Object.defineProperty(this, 'isSubscribed', {
-			get: function isSubscribedGetter() {
-				return this.id !== null;
-			}
-		});
-	}
+	//{bool} - True if the user wants to receive text messages
+	Object.defineProperty(this, 'isSubscribed', {
+		get: function isSubscribedGetter() {
+			return this.id !== null;
+		}
+	});
 }

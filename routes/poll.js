@@ -3,43 +3,72 @@
 const express = require('express');
 const router = express.Router();
 const https = require('https');
+const rethinkdb = require('rethinkdb');
+const _ = require('lodash');
 const PushBullet = require('pushbullet');
 const pushBulletApiToken = require('../secret/pushBulletApiToken');
 
 const OKAY_STATUS = 200;
 const NOT_IMPLEMENTED_STATUS = 501
 
-const pushBulletRequestOptions = {
-	hostname: 'api.pushbullet.com',
-	port: 443,
-	path: '/v2/ephemerals',
-	method: 'POST',
-	headers: {
-		'Access-Token': pushBulletApiToken,
-		'Content-Type': 'application/json'
-	}
-};
-
 //Triggers a text message to be sent to all users
+//@param req
+//	@prop _rdbConn - which is the rethinkdb connection varaible
 router.post('/', function(req, res, next) {
 
-	sendText(8105238169, "Does this work Jeff");
+	//Delete current rsvps
+	rethinkdb.table('Rsvps')
+		.delete()
+		.run(req._rdbConn)
+		.then(result => {
 
-	//Return success
-	res.sendStatus(OKAY_STATUS);
+			//Throw error if exists
+			if (result.first_error) {
+				throw result.first_error;
+			}
 
-	//Close db connection
-	next()
+			//Send out all messages
+			return rethinkdb.table('Users')
+			    .orderBy({index: "createdAt"})
+			    .run(req._rdbConn);
+		})
+	    .then(cursor => {
+	        return cursor.toArray();
+	    })
+	    .then(allUsers => {
+
+	    	allUsers.forEach(user => {
+	    		var message = `Rocket League Team ASSEMBLE!!!
+
+(Count Me In assemble.jeffsallans.com/#?pN=${user.phoneNumber}&rY=true) 
+
+[Not today assemble.jeffsallans.com/#?pN=${user.phoneNumber}&rY=true]`;
+
+	    		sendText(user.phoneNumber, message);	
+	    	});
+
+			//Return success
+			res.sendStatus(OKAY_STATUS);
+	    })
+	    .error(error => { throw error })
+		//Close db connection
+	    .finally(next)
 });
 
 //Reset all rsvp data
 router.delete('/', function(req, res, next) {
 
-	//Return success
-	res.sendStatus(NOT_IMPLEMENTED_STATUS);
+	//Delete current rsvps
+	rethinkdb.table('Rsvps')
+		.delete()
+		.run(req._rdbConn)
+		.then(result => {
 
-	//Close db connection
-	next()
+			if (result.first_error) throw result.first_error;
+		}) 
+		.error(error => { throw error })
+		//Close db connection
+		.finally(next)
 });
 
 module.exports = router;
