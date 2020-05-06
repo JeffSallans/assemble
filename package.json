@@ -15,7 +15,7 @@
     "ejs": "~2.5.5",
     "express": "~4.16.0",
     "lodash": "^4.9.0",
-    "morgan": "~1.9.1",
+    "morgan": "~1.10.0",
     "rethinkdb": "^2.3.0",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.2",
