@@ -19,7 +19,7 @@
     "rethinkdb": "^2.3.0",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.2",
-    "snyk": "^1.314.0"
+    "snyk": "^1.319.0"
   },
   "snyk": true
 }
