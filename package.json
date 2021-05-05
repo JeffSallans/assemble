@@ -18,7 +18,7 @@
     "morgan": "~1.9.1",
     "rethinkdb": "^2.3.0",
     "serve-favicon": "~2.4.5",
-    "socket.io": "^2.0.2",
+    "socket.io": "^3.0.0",
     "snyk": "^1.314.0"
   },
   "snyk": true
